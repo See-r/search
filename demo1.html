@@ -1,0 +1,397 @@
+<!DOCTYPE html>
+<html>
+<title>W3.CSS</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="https://www.w3schools.cn/w3css/4/w3.css">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>search</title>
+  <script src="https://d3js.org/d3.v5.min.js"></script>
+  <link rel="stylesheet" href="./css/Romania.css">
+  <link rel="stylesheet" href="./css/DFS_BFS.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.6.1/jquery.min.js"></script>  
+  <script src="./js/DFS_BFS.js"></script>
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+</head>
+<body>
+
+<!-- Sidebar -->
+<div class="w3-sidebar w3-light-grey w3-bar-block" style="width:15%">
+  <h3 class="w3-bar-item"><a href="index.html">Search</a></h3>
+  <a href="./demo1.html" class="w3-bar-item w3-button">Uninformed Search</a>
+  <a href="#" class="w3-bar-item w3-button">Informed Search</a>
+</div>
+
+<!-- Page Content -->
+<div style="margin-left:15%">
+    <div class="w3-container w3-teal">
+        <h1>Uninformed Search</h1>
+    </div>
+    <div class="w3-container"> 
+    <font size="5">
+    <p>Uninformed search is a class of general-purpose search algorithms which operates in brute force-way. Uninformed search algorithms do not have additional information about state or search space other than how to traverse the tree, so it is also called blind search.</p>
+      
+    <a href="https://akshaymatre08.github.io/AlgorithmVisualizer/" >→ Try Search Algorithm</a> 
+  </font>
+    
+    </div>    
+<img src="./image/search1.png" alt="" style="width:50%;position: relative; left: 280px;">
+
+<div class="w3-container w3-teal">
+
+  <h1>Example: Traveling in Romania</h1>
+</div>
+<div class="w3-container">
+  <svg id="mainsvg"></svg>
+  <script src="./js/Romania.js"></script>
+  <div id="show">
+    <div>
+      <span id="show1" style="width:50%; position:relative; left:10px;">
+        Start Node
+      </span>
+      <br>
+      <input id="node1" type="text" value="Arad" outline="none">
+      <br>
+      <span id="show2" style="width:50%; position:relative; left:10px;">
+        End Node
+      </span>
+      <br>
+      <input id="node2" type="text" value="Bucharest" outline="none">
+    </div>
+    <div id="showresult">
+    </div>
+  </div>
+  <button id="BFS" onmousedown="BFS_down()"
+    onmouseup="BFS_up(document.getElementById('node1').value,document.getElementById('node2').value)">
+    Start BFS
+  </button>
+  <button id="Greedy_Algorithm" onmousedown="Greedy_down()"
+    onmouseup="Greedy_up(document.getElementById('node1').value,document.getElementById('node2').value)">
+    Start Greedy
+  </button>
+  <button id="Astar_Algorithm" onmousedown="Astar_down()"
+    onmouseup="Astar_up(document.getElementById('node1').value,document.getElementById('node2').value)">
+    Start A*
+  </button>
+  <button id="Stop" onmousedown="Stop_down()" onmouseup="Stop_up()">
+    Stop
+  </button>
+  <button id="clear" onmousedown="Clear_down()" onmouseup="Clear_up()">
+    Clear
+  </button>
+  <br>
+  <br>
+  <h2 style="position: relative;">
+    <font size="6">What’s in a State Space?</font> 
+</h2>
+
+
+<div class="w3-container">
+<font size="5">
+<p>The <span style="color: red;">world state</span> includes every last detail of the environment</p>
+</font>
+    <img src="./image/search7.png" alt="" style="width:30%; position:relative; left:150px;">
+    <font size="5">
+      <p>A <span style="color: red;">search state</span> keeps only the details needed for planning (abstraction)</p>
+    </font>    
+<ul>
+    <font size="5">
+    <p style="color: blue;">Problem: Pathing</p>
+    <li>States: (x,y) location</li>
+    <li>Actions: NSEW</li>
+    <li>Transition: update x,y value</li>
+    <li>Goal test: is (x,y)=destination</li>
+    <br>
+    <p style="color: blue;">Problem: Eat-All-Dots</p>
+    <li>States: {(x,y), dot Booleans}</li>
+    <li>Actions: NSEW</li>
+    <li>Transition: update x,y and possibly a dot Boolean</li>
+    <li>Goal test: dots all false</li>
+    <br>
+    <p style="color: blue;"> <img src="./image/search8.png" alt="" style="float:right; width:30%;">World state:</p>
+    <li>Agent positions: 120</li>
+    <li>Food count: 30</li>
+    <li>Ghost positions: 12</li>
+    <li>Agent facing: NSEW</li>
+    <br>
+    <p style="color: blue;">How many</p>
+    <li>World states?</li>
+    <li>States for pathing?</li>
+    <li>States for eat-all-dots?</li>
+    </font>
+</ul>
+<br>
+</div>
+<br>
+<div class="w3-container w3-teal">
+  <h1>Depth-First Search</h1>
+</div>    
+<br>
+<div class="w3-container">
+  <img src="./image/DFS1.png" alt="" style="width:50%;position: relative; left: 280px;">
+  <font size="5">
+  <p>Suppose that we replace the queue in our preceding breadth-first
+    search function with a stack. The function will now perform a
+    depth-first search!</p>
+    <font size="4">
+    <pre style="margin-left: 0.79in"><font color="#008800"><img src="./image/dfs.gif" alt="" style="float:right;width:50%;"># iterative depth-first search</font>
+    <font color="#000080">def</font><font color="#000000"> dfs_iter(g, start):</font>
+    <font color="#000000">    q = []</font>
+    <font color="#000000">    q.append(start)</font>
+    <font color="#000000">    visited = { start }</font>
+    <font color="#000000">    </font>
+    <font color="#000000">    </font><font color="#000080">while</font><font color="#000000"> q:</font>
+    <font color="#000000">        node = q.pop()</font>
+    <font color="#000000">        print(</font><font color="#0000ff">'exploring '</font><font color="#000000"> + node)</font>
+    <font color="#000000">        </font><font color="#000080">for</font><font color="#000000"> n in g[node]:</font>
+    <font color="#000000">            </font><font color="#000080">if</font><font color="#000000"> n not in visited:</font>
+    <font color="#000000">                visited.add(n)</font>
+    <font color="#000000">                q.append(n)     </font><font color="#008800"># push</font></pre><p>
+
+    </font>
+
+    Specifically, this is a <b>non-recursive depth-first search</b>, or a
+    depth-first search with an <b>explicit stack</b>.</p>
+    <p>This shows that there is a close relationship between stacks and
+    depth-first search. Specifically, a stack is a LIFO (last in first
+    out) data structure. And when we perform a depth-first search, the
+    <b>last</b> frontier node we discover is the <b>first</b> that we
+    will expand by following its edges. Similarly, a queue is a FIFO
+    (first in first out) data structure, and in a breadth-first search
+    the first frontier node we discover is the first that we will expand.</p>
+    <p>It is sometimes wise to implement a depth-first search
+    non-recursively in a situation where the search may be very deep.
+    This will avoid running out of call stack space, which is fixed on
+    most operating systems.</p>
+
+  </font>
+
+</div>
+<br>
+<div class="w3-container w3-teal">
+  <h1>Breadth-First Search</h1>
+</div>    
+<br>
+<div class="w3-container">
+  <img src="./image/BFS1.png" alt="" style="width:50%;position: relative; left: 280px;">
+  <font size="5">
+    <p>Starting from some node N, a <b>breadth-first search</b> first
+      visits nodes adjacent to N, i.e. nodes of distance 1 from N. It then
+      visits nodes of distance 2, and so on. In this way it can determine
+      the <b>shortest distance</b> from N to every other node in the graph.</p>
+      <p>We can implement a breadth-first search using a <b>queue</b>. Just
+      like with depth-first graph search, we must remember all nodes that
+      we have visited to avoid walking in circles. We begin by adding the
+      start node to the queue and marking it as visited. In a loop, we
+      repeatedly remove nodes from the queue. Each time we remove an node,
+      we mark all of its adjacent unvisited nodes as visited and add them
+      to the queue. The algorithm terminates once the queue is empty, at
+      which point we will have visited all reachable nodes.</p>
+      <p>The queue represents the frontier. When we remove a node from the
+      queue, it moves to the explored set. Just like with depth-first graph
+      search, the visited nodes are the frontier nodes and the nodes in the
+      explored set.</p>
+      <p>As the algorithm runs, all nodes in the queue are at approximately
+      the same distance from the start node. To be more precise, at every
+      moment in time there is some value d such that all nodes in the queue
+      are at distance d or (d + 1) from the start node.</p>
+      <p>Here is a Python function bfs() that performs a breadth-first
+        search. It takes a graph in adjacency-list representation, plus a
+        start vertex:</p>
+        <font size="4">
+        <pre style="margin-left: 0.79in"><font color="#000080"><font color="#008800"><img src="./image/bfs.gif" alt="" style="float:right;width:50%;">import</font><font color="#000000"> collections</font>
+        
+        <font color="#008800"># breadth-first search</font>
+        <font color="#000080">def</font><font color="#000000"> bfs(g, start):</font>
+        <font color="#000000">    q = deque()</font>
+        <font color="#000000">    q.appendleft(start)   </font><font color="#008800"># enqueue</font>
+        <font color="#000000">    visited = { start }</font>
+        <font color="#000000">    </font>
+        <font color="#000000">    </font><font color="#000080">while</font><font color="#000000"> q:</font>
+        <font color="#000000">        node = q.pop()</font>
+        <font color="#000000">        print(</font><font color="#0000ff">'exploring '</font><font color="#000000"> + node)</font>
+        <font color="#000000">        </font><font color="#000080">for</font><font color="#000000"> n in g[node]:</font>
+        <font color="#000000">            </font><font color="#000080">if</font><font color="#000000"> n not in visited:</font>
+        <font color="#000000">                visited.add(n)</font>
+        <font color="#000000">                q.appendleft(n)   </font><font color="#008800"># enqueue</font></pre> 
+        </font>
+        <p>
+        Note that we must mark nodes as visited when we add them to the
+        queue, not when we remove them. (If we marked them as visited only
+        when removing them, then our algorithm could add the same node to the
+        queue more than once.)</p>
+        <p>Like a depth-first search, a breadth-first search does a constant
+        amount of work for each vertex and edge, so it also runs in time O(V
+        + E).</p>
+  </font>
+</div>
+<br>
+<div class="w3-container w3-teal">
+  <h1>DFS vs BFS </h1>
+</div>    
+<br>
+<div class="w3-container">
+  <h2 style="position: relative;">
+    <font size="6">Example: Maze Water DFS/BFS (part 1)</font> 
+  </h2>
+  <video loop="loop" controls="controls" poster="" style="width:70%; position: relative; left:200px">
+    <source src="./video/vedio3.mp4" type="video/mp4"></source>
+  </video>
+  <br>
+  <h2 style="position: relative;">
+    <font size="6">Example: Maze Water DFS/BFS (part 2)</font> 
+  </h2>
+  <video loop="loop" controls="controls" poster="" style="width:70%; position: relative; left:200px">
+    <source src="./video/vedio4.mp4" type="video/mp4"></source>
+  </video>
+</div>
+<br>
+<div class="w3-container w3-teal">
+  <h1>Example: Depth First Search and Breadth First Search</h1>
+</div>
+<br>
+<div class="w3-container">
+<div class = "main">
+    <div class="graph">
+        <img src="./image/grafo.png" alt="grafo">
+    </div>
+    <div class="options">
+        <div style="text-align: center;" >
+                <button class="btn btn-primary" onClick ="switchSearch()" id="dfs" type="submit">DFS</button>
+                <button class="btn btn-primary" onClick ="switchSearch()" id="bfs" disabled type="submit">BFS</button>
+                <hr>
+        </div>
+        <div>
+                <form>
+                    <div class="form-group">
+                        <label for="begin">Path beggining</label>
+                        <select class="form-control" id="begin" onchange="setBegin()">
+                            <option>a</option>
+                            <option>b</option>
+                            <option>c</option>
+                            <option>d</option>
+                            <option>e</option>
+                            <option>f</option>
+                            <option>g</option>
+                            <option>h</option>
+                            <option>i</option>
+                            <option>j</option>
+                            <option>k</option>
+                            </select>
+                            <br>
+                            <label for="end">Path End</label>
+                        <select class="form-control" id="end">
+                            <option>a</option>
+                            <option>b</option>
+                            <option>c</option>
+                            <option>d</option>
+                            <option>e</option>
+                            <option>f</option>
+                            <option>g</option>
+                            <option>h</option>
+                            <option>i</option>
+                            <option>j</option>
+                            <option>k</option>
+                        </select>
+                    </div>
+                </form> 
+                <hr>    
+        </div>
+        <span>Path</span>
+        <div class="path">
+            <div class="first" id="1"></div>
+            <div id="2"></div>
+            <div id="3"></div>
+            <div id="4"></div>
+            <div id="5"></div>
+            <div id="6"></div>
+            <div id="7"></div>
+            <div id="8"></div>
+            <div id="9"></div>
+            <div id="10"></div>
+            <div id="11"></div>
+        </div>
+        <div class="controls">
+                <button type="button" class="btn btn-success btn-lg btn-block" id="start" onclick="start()">Start</button>
+                <button type="button" class="btn btn-danger btn-lg btn-block"  id="reset" onclick="reset()" disabled>Reset</button>
+        </div>
+    </div>
+</div>
+
+<script>
+        function setBegin() {
+            let x = document.getElementById("begin").value;
+            document.getElementById("1").innerHTML =  x;
+        }
+        
+</script>
+
+<script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
+
+
+</div>
+<br>
+<div class="w3-container w3-teal">
+  <h1>Uniform Cost Search</h1>
+</div>    
+<br>
+<div class="w3-container">  
+  <font size="5">
+    <a href="https://akshaymatre08.github.io/AlgorithmVisualizer/" >→ Try Search Algorithm</a> 
+  </font>
+  <br>
+  <img src="./image/ucS1.png" alt="" style="width:50%;position: relative; left: 280px;">
+  <br>
+  <h2 style="position: relative;">
+    <font size="6">What is the Uniform Cost Search Algorithm?</font> 
+  </h2>
+  <font size="5">
+    <p><img src="./image/ucs.gif" alt="" style="float:right;width:60%;">The Uniform Cost Search Algorithm is a search algorithm to find the minimum cumulative cost of the path from the source node to the destination node. It is an uninformed algorithm i.e. it doesn't have prior information about the path or nodes and that is why it is a brute-force approach.</p>
+    <p>Uniform-Cost Search is a variation of <a href="https://en.wikipedia.org/wiki/Dijkstra%27s_algorithm">Dijikstra’s algorithm</a> . It is used to find the minimum path from the source node to the destination node around a directed weighted graph. This searching algorithm uses a brute force approach, visits all the nodes based on their current weight, and finds the path having minimum cost by repeatedly checking all the possible paths.</p>
+
+      <p>
+        As it doesn't consider any prior state or information about the path or the destination node, it is an uninformed search algorithm.
+      </p>
+      <p>
+        We use a boolean array visited and a priority queue to find the minimum cost. The node with minimum cost has the highest priority. It uses blind search as there is no prior information on the nodes.
+      
+      The algorithm for the above algorithm is given as below:
+      </p>
+      <ul>
+        <li>Create a priority queue, a boolean array visited of the size of the number of nodes, and a min_cost variable initialized with maximum value. Add the source node to the queue and mark it visited.</li>
+        <li>Pop the element with the highest priority from the queue. If the removed node is the destination node, check the min_cost variable, if the value of the min_cost variable is greater than the current cost then update the variable.</li>
+        <li>If the given node is not the destination node then add all the unvisited nodes to the priority queue adjacent to the current node.</li>
+      </ul>
+  </font>
+  <br>
+  <h2 style="position: relative;">
+    <font size="6">Video of Demo Empty UCS</font> 
+  </h2>
+  <video loop="loop" controls="controls" poster="" style="width:70%; position: relative; left:200px">
+    <source src="./video/vedio5.mp4" type="video/mp4"></source>
+  </video>
+  <br>
+  <h2 style="position: relative;">
+    <font size="6">Video of Demo Maze with Deep/Shallow Water --- BFS or UCS? (part 1)</font> 
+  </h2>
+  <video loop="loop" controls="controls" poster="" style="width:70%; position: relative; left:200px">
+    <source src="./video/vedio6.mp4" type="video/mp4"></source>
+  </video>
+  <br>
+  <h2 style="position: relative;">
+    <font size="6">Video of Demo Maze with Deep/Shallow Water --- BFS or UCS? (part 2)</font> 
+  </h2>
+  <video loop="loop" controls="controls" poster="" style="width:70%; position: relative; left:200px">
+    <source src="./video/vedio7.mp4" type="video/mp4"></source>
+  </video>
+</div>
+</div> 
+</body>
+</html>
+
+<!DOCTYPE html>
+<html lang="en">
+</html>

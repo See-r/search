@@ -1,71 +1,91 @@
-<!DOCTYPE HTML>
+<!DOCTYPE html>
 <html>
-
-<head>
-    <meta charset="utf-8">
-    <title>A* FindPath</title>
-    <script src="./bin/system.js"></script>
-    <script src="./bin/aStar.js"></script>
-    <script src="./bin/command.js"></script>
-    <script src="./bin/main.js"></script>
-    <script>
-        SystemJS.import('bin/main.js').then(function (m) {
-            document["main"] = new m.main();
-        });
-
-    </script>
-</head>
-
+<title>W3.CSS</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="https://www.w3schools.cn/w3css/4/w3.css">
 <body>
-<h1>A* hello~</h1>
-<video src="./vedio/vedio1.mp4" controls="controls" width="700px" height="400px">
-    您的浏览器不支持 video 标签
+
+<!-- Sidebar -->
+<div class="w3-sidebar w3-light-grey w3-bar-block" style="width:15%">
+  <a href="./index.html"><h3 class="w3-bar-item">Search</h3></a>
+  <a href="./demo1.html" class="w3-bar-item w3-button">Uninformed Search</a>
+  <a href="#" class="w3-bar-item w3-button">Informed Search</a>
+</div>
+
+<!-- Page Content -->
+<div style="margin-left:15%">
+    <div class="w3-container w3-teal">
+        <h1>Search</h1>
+      </div>
+      
+<img src="./image/search1.png" alt="" style="width:50%;position: relative; left: 280px;">
+
+<div class="w3-container w3-teal">
+  <h1>Agents that Plan Ahead</h1>
+</div>
+<h2 style="position: relative; left:40px">
+    <font size="6">Planning Agents</font> 
+</h2>
+<div class="w3-container">
+    <img src="./image/search2.png" alt="" style="width:30%; position:relative; left:150px;">
+    <img src="./image/search3.png" alt="" style="width:30%; position: relative; left: 300px;">
+
+<ul>
+    <font size="5">
+    <li>Planning agents decide based on evaluating future action sequences</li>
+    <li>Must have a model of how the world evolves in response to actions</li>
+    <li>Usually have a definite goal</li>
+    <li>Optimal: Achieve goal at least cost</li>
+    </font>
+</ul>
+<br>
+<h2 style="position: relative; left:20px">
+    <font size="6">Move to nearest dot and eat it</font> 
+</h2>
+<video loop="loop" controls="controls" poster="" style="width:70%; position: relative; left:200px">
+    <source src="./video/video1.mp4" type="video/mp4"></source>
 </video>
-    <style>
-        .rootContain {
-            width: 460px;
-            height: 560px;
-            margin: 0 auto;
-        }
 
-        .play_slidebar {
-            position: absolute;
-            left: 0;
-            right: 0;
-            width: 360px;
-            margin: auto;
-            margin-top: 20px;
-        }
-    </style>
+<h2 style="position: relative; left:20px">
+    <font size="6">Precompute optimal plan, execute it</font> 
+</h2>
+<video loop="loop" controls="controls" poster="" style="width:70%; position: relative; left:200px">
+    <source src="./video/video2.mp4" type="video/mp4"></source>
+</video>
 
-    <li class="cube_view_div" style="list-style-type: none; ">
-        <div class="rootContain" id="rootcont" style="background: #333333">
-        </div>
+</div>
+<div class="w3-container w3-teal">
+    <h1>Search Problems</h1>
+</div>
+<h2 style="position: relative; left:20px">
+    <font size="6">A search problem consists of:</font> 
+</h2>
+<img src="./image/search5.png" alt="" style="width:50%; position:relative; left:50px;">
+<img src="./image/search6.png" alt="" style="width:30%; position: relative; left: 190px;">
+<ul>
+    <font size="5">
+    <li>A state space S 
     </li>
-
-    <li class="slide_div" style="list-style-type: none;height: 50px;">
-        <input class="play_slidebar" id="play_sb" type="range" min="0" max="10000" value="0" />
+    <li>An initial state s0
     </li>
-
-    <li class="btn_div" style="list-style-type: none;height: 50px;">
-        <div>
-            <input  id="btn_left" type="button" style="position: absolute; left: 0 ;right: 110px ; width: 50px; height: 36px; margin: auto; margin-top: 5px"  value="|<"/>
-            <input  id="btn_center" type="button" style="position: absolute; left: 0 ;right: 0 ; width: 46px; height: 36px; margin: auto; margin-top: 5px" value="▷"/>
-            <input  id="btn_right" type="button" style="position: absolute; left: 110px ;right: 0 ; width: 50px; height: 36px; margin: auto; margin-top: 5px" value=">|"/>
-        </div>
+    <li>Actions A(s) in each state
     </li>
-
-    <li style="list-style-type: none;height: 50px;">
-        <font size = "3" style="position: absolute;width: 50%; left: 0 ;right: 0 ; margin: auto; margin-top: 5px; text-align:center" >
-            try to press any tow white block
-        </font>
+    <li>Transition model Result(s,a)
     </li>
-
-    <script>
-
-    </script>
-
+    <li>A goal test G(s)
+    </li>
+    <li>Action cost c(s,a,s’)
+    </li>
+    </font>
+</ul>
+<h2 style="position: relative; left:20px">
+    <font size="6">A solution is an action sequence that reaches a goal state</font> 
+</h2>
+<h2 style="position: relative; left:20px">
+    <font size="6">An optimal solution has least cost among all solutions
+    </font> 
+</h2>
+</div>
+      
 </body>
-
-
 </html>
