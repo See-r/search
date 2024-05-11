@@ -1,0 +1,387 @@
+<!DOCTYPE html>
+<html>
+<title>Informed Search</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="https://www.w3schools.cn/w3css/4/w3.css">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>search</title>
+  <style>
+    .pancake {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      width: 50px;
+      height: 50px;
+      background-color: #f2f2f2;
+      border: 1px solid #ccc;
+      font-size: 24px;
+      font-weight: bold;
+      cursor: pointer;
+      border-radius: 50%;
+      box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
+    }
+    .pancake-container {
+
+    margin-bottom: 20px;
+    margin-left: 100px; /* 添加此样式 */
+  }
+
+  </style>
+  <script src="https://d3js.org/d3.v5.min.js"></script>
+  <link rel="stylesheet" href="./css/Romania.css">
+  <link rel="stylesheet" href="./css/demo2.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.6.1/jquery.min.js"></script>  
+  <script src="./js/DFS_BFS.js"></script>
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+</head>
+<body>
+
+<!-- Sidebar -->
+<div class="w3-sidebar w3-light-grey w3-bar-block" style="width:15%">
+  <h3 class="w3-bar-item"><a href="index.html">Search</a></h3>
+  <a href="./demo1.html" class="w3-bar-item w3-button">Uninformed Search</a>
+  <a href="./demo2.html" class="w3-bar-item w3-button">Informed Search</a>
+</div>
+
+<!-- Page Content -->
+<div style="margin-left:15%">
+    <div class="w3-container w3-teal">
+        <h1>Informed Search</h1>
+    </div>
+    <div class="w3-container"> 
+        <font size="5">
+        <p>Informed search is a type of search algorithm in artificial intelligence that uses additional information or heuristics 
+            to make more accurate decisions about which paths to explore first.</p>
+        <p>Informed search algorithms can quickly reject irrelevant 
+            or less promising alternatives, allowing the search to concentrate on the most reliable options, by employing domain-specific 
+            knowledge to drive the search.  </p>
+    <br>
+    </div>    
+
+    <div class="w3-container w3-teal">
+        <h1>Example: Pancake Sorting Problem </h1>
+    </div>
+    <div class="w3-container"> 
+      <font size="5">
+      <p>Assume that n numbered pancakes are stacked, and that a spatula can be used to reverse the order of the top k 
+        pancakes for 2&lt=k&lt=n. Then the pancake sorting problem asks how many such "prefix reversals" are sufficient to 
+        sort an arbitrary stack. </p>
+      <p>Here is a game related to pancake flipping. You should sort these elements from top to bottom in order from 
+        smallest to largest.
+      </p>
+  <br>
+  <div class="container">
+    <div class="image">
+      <img src="./image/pancake_problem.png", alt=""  style="float:right; width:49%;">
+    </div>
+    <div class="pancake-contanier" id="pancakes" style="margin-left: 200px">
+
+        <div class="pancake" onclick="flipPancake(0)">3</div>
+        <div class="pancake" onclick="flipPancake(1)">6</div>
+        <div class="pancake" onclick="flipPancake(2)">2</div>
+        <div class="pancake" onclick="flipPancake(3)">5</div>
+        <div class="pancake" onclick="flipPancake(4)">1</div>
+        <div class="pancake" onclick="flipPancake(5)">4</div>        
+      </div>
+
+      <p id="steps" style="margin-left: 150px">Sorting Steps: 0</p>
+      <!-- <button onclick="pancakeSort()">Sort</button> -->
+      
+      <button class="shuffle-button" onclick="shufflePancakes()" style="margin-left: 180px">Shuffle</button>    
+      
+      
+
+      
+
+    </div>
+
+      <script>
+        var pancakes = document.getElementById("pancakes").children;
+        var n = pancakes.length;
+        var steps = 0;
+        
+        function pancakeSort() {
+          sortPancakes(n);
+        }
+        
+        function sortPancakes(n) {
+          if (n <= 1) {
+            console.log("Sorting completed.");
+            document.getElementById("steps").innerHTML = "Sorting Steps: " + steps;
+            return;
+          }
+          
+          var maxIndex = findMaxIndex(n);
+          
+          if (maxIndex !== n - 1) {
+            flip(maxIndex);
+            flip(n - 1);
+            steps += 2;
+          }
+          
+          sortPancakes(n - 1);
+        }
+        
+        function flip(k) {
+          var i = 0;
+          var j = k;
+          
+          while (i < j) {
+            var temp = pancakes[i].innerHTML;
+            pancakes[i].innerHTML = pancakes[j].innerHTML;
+            pancakes[j].innerHTML = temp;
+            
+            i++;
+            j--;
+          }
+          
+        }
+        
+        function findMaxIndex(n) {
+          var maxIndex = 0;
+          for (var i = 1; i < n; i++) {
+            if (parseInt(pancakes[i].innerHTML) > parseInt(pancakes[maxIndex].innerHTML)) {
+              maxIndex = i;
+            }
+          }
+          return maxIndex;
+        }
+        
+        function flipPancake(index) {
+          flip(index);
+          steps++;
+          document.getElementById("steps").innerHTML = "Sorting Steps: " + steps;
+          if (isSorted()) {
+            //   alert("Success! Steps taken: " + steps);
+              showSuccessMessage("Success! Steps taken: " + steps);
+              shufflePancakes();
+            }
+          
+        }
+        
+        function shufflePancakes() {
+          var pancakeValues = [];
+          for (var i = 1; i <= n; i++) {
+            pancakeValues.push(i);
+          }
+          
+          for (var i = n - 1; i > 0; i--) {
+            var j = Math.floor(Math.random() * (i + 1));
+            var temp = pancakeValues[i];
+            pancakeValues[i] = pancakeValues[j];
+            pancakeValues[j] = temp;
+          }
+          
+          for (var i = 0; i < n; i++) {
+            pancakes[i].innerHTML = pancakeValues[i];
+          }
+          
+          steps = 0;
+          document.getElementById("steps").innerHTML = "Sorting Steps: " + steps;
+        }
+        
+        function isSorted() {
+          for (var i = 0; i < n - 1; i++) {
+            if (parseInt(pancakes[i].innerHTML) > parseInt(pancakes[i + 1].innerHTML)) {
+              return false;
+            }
+          }
+          return true;
+        }
+    
+        function showSuccessMessage(message) {
+          var successBox = document.createElement('div');
+          successBox.innerHTML = message;
+          successBox.style.position = 'fixed';
+          successBox.style.top = '50%';
+          successBox.style.left = '50%';
+          successBox.style.transform = 'translate(-50%, -50%)';
+          successBox.style.backgroundColor = '#f2f2f2';
+          successBox.style.border = '1px solid#ccc';
+          successBox.style.padding = '20px';
+          successBox.style.fontSize = '24px';
+          successBox.style.fontWeight = 'bold';
+          
+          document.body.appendChild(successBox);
+          
+          setTimeout(function() {
+            successBox.remove();
+          }, 3000);
+        }
+        
+      </script>
+    <br>
+    <h2 style="position: relative;">
+      <font size="6">How many steps are needed to arrange the pancakes in order?</font> 
+  </h2>
+  
+    <p>   For a permutation σ of the integers from 1 to n, let f(σ) be the smallest number of prefix reversals that will transform σ 
+      to the identity permutation, and let f(n) be the largest such f(σ) for all σ in (the symmetric group) Sn. We show that f(n)&lt=(5n+5)/3,
+      and that f(n)&gt=17n/16 for n a multiple of 16. If, furthermore, each integer is required to participate in an even number of reversed prefixes,
+      the corresponding function g(n) is shown to obey 3n/2-1&lt=g(n)&lt=2n+3.</p>
+
+      <h2 style="position: relative;">
+        <font size="6">State Space Graph</font> 
+        <font size="4">(The number in graph represents the number of pancake flipped, and also represents cost)</font>
+    </h2>
+    <div class="image">
+      <img src="./image/pancake_statespace.png", alt=""  style=" width:60%;">
+    </div>
+    <h2 style="position: relative;">
+      <font size="6">General Tree Search</font> 
+  </h2>
+    <font size="3"><pre style="margin-left: -0.3in"><img src="./image/pancake_tree.gif" alt="" style="float:right;width:40%;">
+      <font color="#000080"></font><font color="#0000ff">fucntion</font><font color="#000000"> TREE-SEARCH(</font><font color="#008800">problem, strategy</font>) <font color="#0000ff">return</font><font color="#000000"> a solution, or failure</font>
+      <font color="#000000">    initialize the search tree using the initial state of</font><font color="#008800"> problem</font>
+      <font color="#0000ff">    loop do</font>
+      <font color="#0000ff">        if</font><font color="#000000"> there are no candidates for expansion </font><font color="#0000ff">then </font>
+      <font color="#0000ff">            return</font> failure
+      <font color="#000000">        choose a leaf node for expansion according to </font><font color="#008800">strategy</font>
+      <font color="#0000ff">        if</font><font color="#000000"> the node contains a goal state</font><font color="#0000ff"> then</font>
+      <font color="#0000ff">            return </font><font color="#000000">the corresponding solution</font>
+      <font color="#0000ff">        else</font><font color="#000000"> expand the node and add the resulting nodes to the search tree</font>
+      <font color="#0000ff">    end</font></pre>
+    </font>
+
+    <div class="w3-container"> 
+      <font size="5">
+      <p>Can we use additional information to make more accurate decisions?
+      </p>
+      <p> Next, let's learn what <span style="color: red;">heuristics</span> are.</p>
+  </div>
+  </div>
+
+
+
+  <div class="w3-container w3-teal">
+    <h1>Search Heuristics</h1>
+</div>
+
+<div class="w3-container">
+<ul>
+  <br>
+  <font size="5">
+  <p style="color: blue;">A heuristic is:</p>
+  <li>A function that estimates how close a state is to a goal</li>
+  <li>Designed for a particular search problem</li>
+  <li>Examples: Manhattan distance, Euclidean distance for pathing</li>
+  </font>
+  <p><img src="./image/pancake_hx.png" alt="" style="float:right; width:45%;"> <br><br><br>For example, the heuristic 
+    of pancake problem is the number of the largest pancake that is still out of place.
+  </p>
+</ul>
+</div>
+
+<div class="w3-container w3-teal">
+  <h1>Greedy Search</h1>
+</div>
+
+<div class="w3-container">
+  <img src="./image/greedy_mountain.png" alt="" style="width:50%;position: relative; left: 280px;">
+  <font size="5">
+  <p>Greedy Search is an AI search algorithm that attempts to find the most promising path from a given starting point to a goal. It prioritizes paths that appear to be the most promising, regardless of whether or not they are actually the shortest path. The algorithm works by evaluating the cost of each possible path and then expanding the path with the lowest cost. This process is repeated until the goal is reached.</p>
+  <p>The strategy of greedy search is to expand a nod that you think is closest to a goal state.</p>
+  <p style="color:blue;">So what's the heuristic of greedy search? </p>
+  <p style="text-indent: 40px;">Heuristic: estimate of distance to nearest goal for each state</p>
+  <p style="color: blue;">Greedy Search Cases</p>
+  </font>
+  <ul>
+    <font size="5">
+    <li>common case: best-first takes you straight to the right(or wrong) goal</li>
+    <li>worst case: like a badly-guided  DFS</li>
+    </font>
+  </ul>
+  
+  <h2 style="position: relative;">
+  <font size="6">Video of Demo Contours Greedy (Empty)</font> 
+  </h2>
+  <video loop="loop" controls="controls" poster="" style="width:70%; position: relative; left:200px">
+    <source src="./video/greedy1.mp4" type="video/mp4"></source>
+  </video>
+  <br>
+  <h2 style="position: relative;">
+    <font size="6">Video of Demo Contours Greedy (Pacman Small Maze)</font> 
+  </h2>
+  <video loop="loop" controls="controls" poster="" style="width:70%; position: relative; left:200px">
+    <source src="./video/greedy2.mp4" type="video/mp4"></source>
+  </video>
+</div>
+
+<div class="w3-container w3-teal">
+  <h1>A* Search</h1>
+</div>
+
+<div class="w3-container">
+  <img src="./image/Astar_like.png" alt="" style="width:50%;position: relative; left: 280px;">
+
+  <p>A* search combines UCS and greedy search. </p>
+  <ul>
+    <li><font color="#3333ff">Uniform-cost</font><font color="#000000"> orders by path cost or backward cost g(n)</font></li>
+    <li><font color="#cc0000">Greedy</font><font color="#000000"> orders by goal proximity, or forward cost h(n)</font></li>
+    <li><font color="#cc00cc">A* search</font><font color="#000000"> orders by the sum: f(n)=g(n)+h(n)</font></li>
+  </ul>
+  <img src="./image/U_G_A_cmp.png" alt="" style="float:left;width:50%;">
+  <img src="./image/teg_grenager.png" alt="" style="position: relative;left: 120px;;width: 30%;">
+  <h2 style="position: relative;">
+    <font size="6">Admissible Heuristics</font> 
+  </h2>
+  <p>A heuristic h is admissible (optimistic) if <span style="color: red;">0≤h(n)≤h*(n)</span> where h*(n) is the true cost to a nearest goal.</p>
+  <p>Coming up with admissible heuristics is most of what’s involved in using A* in practice.
+  </p>
+  <p>A* search terminates when the cost of the best path to the goal that you've actually found is less than or equal to the best possible cost of any other path.
+    Since an admissible heuristic function never overestimates the cost, this is accomplished just by putting the goal vertex into the priority queue when you find it, with its estimated cost equal to its actual cost.
+    This ensures that the A* search will not miss the optimal solution in the search process.
+    The algorithm then terminates when the goal vertex is popped off the queue as the one with the minimum cost. </p>
+    
+    <h2 style="position: relative;">
+      <font size="6">Optimality of A* Tree Search</font> 
+    </h2>
+  <p>Suppose there are two nodes A and B. A is an optimal goal node. B is a suboptimal goal node.</p>
+
+  <P><span style="color: blue;"><strong>Proof:</strong></span></P>
+  <font size="3"><pre style="margin-left: -0.3in"><img src="./image/Optimality_mountain.png" alt="" style="float:right;width:35%;">
+    <font color="#000000">Imagine B is on the fringe</font>
+    <font color="#000000">some ancestor n of A is on the fringe too</font>
+    <font color="#000000">n will be expanded before B</font>
+    <font color="#000000">f(n)=g(n)+h(n)</font>
+    <font color="#000000">f(A)=g(A)+h(A)   for the reason that A is the goal state,h(A)=0    </font>
+    <font color="#000000">so f(A)=g(A)</font>
+    <font color="#000000">for the same reason f(B)=g(B)</font>
+    <font color="#000000">A is optimal,B is suboptimal.g(A)&ltg(B),so f(A)&ltf(B)  </font>
+    <font color="#000000">f(n)&lt=f(A),so f(n)&ltf(B)</font>
+    <font color="#000000">the result is n will be expanded before B</font>
+    <font color="#000000">n represents any ancestor of A</font></pre>
+  </font>
+</div>
+
+  <h2 style="position: relative;">
+    <font size="6">Properties of A* Tree Search</font> 
+  </h2>
+
+<div class="w3-container">
+  <p>A* expands mainly toward the goal, but does hedge its bets to ensure optimality.</p>
+  <h2 style="position: relative;">
+    <font size="5">Video of Demo Contours (Empty) – A*</font> 
+  </h2>
+  <video loop="loop" controls="controls" poster="" style="width:70%; position: relative; left:200px">
+    <source src="./video/contours_Astar.mp4" type="video/mp4"></source>
+  </video>
+  <br>
+  <h2 style="position: relative;">
+    <font size="5">Video of Demo Contours (Pacman Small Maze) – A*</font> 
+  </h2>
+  <video loop="loop" controls="controls" poster="" style="width:70%; position: relative; left:200px">
+    <source src="./video/PSM_Astar.mp4" type="video/mp4"></source>
+  </video>
+  </div>
+
+  <div class="w3-container w3-teal">
+    <h1>Example: Use A* to find the shortest path</h1>
+</div>
+<div class="w3-container">
+  <p>This is a maze game. You can choose two light gray squares in the maze as the starting and ending points (green represents the starting point, red represents the ending point). This demo can automatically calculate the shortest path.</p>
+  <br>
+  <iframe src="./demo/aStar.html" style="width:100%; height:800px;"></iframe>
+</div>
